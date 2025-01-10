@@ -1,139 +1,51 @@
 package Episante.back.Service;
 
-
-import Episante.back.Models.Patient;
-import Episante.back.Models.Sexe;
-import Episante.back.Repository.IPatientrepository;
-import lombok.Data;
+import Episante.back.DAO.IPatientDao;
+import Episante.back.Entity.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 
-@Data
 @Service
 public class PatientService {
 
-
+    @Autowired
+    private IPatientDao patientDao;
 
     @Autowired
-    private IPatientrepository patientDao ;
+    private BCryptPasswordEncoder passwordEncoder; // Inject the password encoder
 
-    public void add(Patient patient) {
+    public String registerPatient(Patient patient) {
+        if (patientDao.findByIdentifier(patient.getIdentifier()).isPresent()) {
+            return "Patient with this identifier already exists.";
+        }
+
+        // Hash the password before saving
+        String hashedPassword = passwordEncoder.encode(patient.getPassword());
+        patient.setPassword(hashedPassword);
+
+        patient.setCreatedAt(Timestamp.from(Instant.now())); // Set creation timestamp
+        patient.setUpdatedAt(Timestamp.from(Instant.now())); // Set update timestamp
+
         patientDao.save(patient);
+        return "Patient registered successfully!";
     }
 
-    public List<Patient> getAllPatients() {return patientDao.findAll();}
-    public Optional<Patient> getById(long id) {return patientDao.findById(id);}
-    public List<Patient> getPatientByName(String name) {return patientDao.findByNom(name);}
-    public List<Patient> getPatientByPrenom(String prenom) {return patientDao.findByPrenom(prenom);}
-
-    public void deletePatient(Optional<Patient> patient) {
-        Patient patientEntity = patient.orElseThrow(() ->
-                new IllegalArgumentException("Utilisateur introuvable"));
-        patientDao.delete(patientEntity);
-    }
-    public void Inscription(Patient patient) {
-        if (patientDao.existsByEmail(patient.getEmail())) {
-            throw new IllegalArgumentException("Cet email est déjà utilisé !");
-        }
-        if (patient.getMdp().length() < 6) {
-            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 6 caractères.");
-        }
-        patientDao.save(patient);
-    }
-    public Patient getByEmail(String email) {
-        if (!patientDao.existsByEmail(email)) {
-            throw new IllegalArgumentException("Cet email n'existe pas!");
-        }
-        return patientDao.findByEmail(email);
-    }
-
-    public void Login(String email, String password) {
-        Patient patient = patientDao.findByEmail(email);
-        if (patient == null || !patient.getMdp().equals(password)) {
-            throw new IllegalArgumentException("Email ou mot de passe incorrect");
-        }
-    }
-
-
-    public String BilanS(Patient patient) {
-        // Vérifier que le patient n'est pas null
-        if (patient == null) {
-            throw new IllegalArgumentException("Le patient ne peut pas être null.");
-        }
-
-        // Convertir le poids, la taille et l'âge en nombres
-        double poids;
-        double taille;
-        int age;
-
-        try {
-            poids = Double.parseDouble(patient.getPoids());
-            taille = Double.parseDouble(patient.getTaille()) / 100; // Convertir en mètres
-            age = Integer.parseInt(patient.getAge());
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Les valeurs de poids, taille ou âge sont invalides.");
-        }
-
-        // Vérifier que les valeurs sont positives
-        if (poids <= 0 || taille <= 0 || age <= 0) {
-            throw new IllegalArgumentException("Les valeurs de poids, taille et âge doivent être positives.");
-        }
-
-        // Calculer l'IMC
-        double imc = poids / (taille * taille);
-
-        // Définir les seuils en fonction du sexe et de l'âge
-        double seuilInsuffisance = 18.5;
-        double seuilNormal = 24.9;
-
-        if (patient.getSexe().equals(Sexe.FEMME)) {
-            seuilInsuffisance = 18.0;
-            seuilNormal = 24.5;
-        }
-
-        if (age > 65) {
-            seuilNormal = 27.0;
-        }
-
-        // Déterminer le bilan en fonction de l'IMC
-        String bilan;
-        if (imc < seuilInsuffisance) {
-            bilan = String.format(
-                    "Bonjour %s %s, votre IMC est %.2f. Vous êtes en insuffisance pondérale. " +
-                            "Nous vous recommandons de consulter un nutritionniste pour évaluer votre alimentation " +
-                            "et d'adopter une alimentation plus riche en calories et en nutriments.",
-                    patient.getPrenom(), patient.getNom(), imc
-            );
-        } else if (imc < seuilNormal) {
-            bilan = String.format(
-                    "Bonjour %s %s, votre IMC est %.2f. Vous avez un poids normal. " +
-                            "Continuez à maintenir un mode de vie équilibré avec une alimentation variée et une activité physique régulière.",
-                    patient.getPrenom(), patient.getNom(), imc
-            );
-        } else if (imc < 30) {
-            bilan = String.format(
-                    "Bonjour %s %s, votre IMC est %.2f. Vous êtes en surpoids. " +
-                            "Nous vous conseillons d'augmenter votre activité physique et de surveiller votre alimentation " +
-                            "en limitant les aliments riches en sucres et en graisses.",
-                    patient.getPrenom(), patient.getNom(), imc
-            );
+    public String loginPatient(String identifier, String password) {
+        Optional<Patient> patientOptional = patientDao.findByIdentifier(identifier);
+        if (patientOptional.isPresent()) {
+            Patient patient = patientOptional.get();
+            if (passwordEncoder.matches(password, patient.getPassword())) {
+                return "Login successful: " + patient.getNom() + " " + patient.getPrenom();
+            } else {
+                return "Invalid password.";
+            }
         } else {
-            bilan = String.format(
-                    "Bonjour %s %s, votre IMC est %.2f. Vous êtes en situation d'obésité. " +
-                            "Nous vous recommandons vivement de consulter un professionnel de santé pour un suivi adapté, " +
-                            "et de privilégier une alimentation saine ainsi qu'une activité physique régulière adaptée.",
-                    patient.getPrenom(), patient.getNom(), imc
-            );
+            return "Patient with this identifier not found.";
         }
-
-        return bilan;
     }
-
-    }
-
-
-
-
+}

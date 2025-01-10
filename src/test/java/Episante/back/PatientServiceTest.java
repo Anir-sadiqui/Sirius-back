@@ -1,7 +1,8 @@
 package Episante.back;
 
 
-import Episante.back.Models.Patient ;
+import Episante.back.DAO.IPatientDao;
+import Episante.back.Entity.Patient ;
 import Episante.back.Service.PatientService ;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
