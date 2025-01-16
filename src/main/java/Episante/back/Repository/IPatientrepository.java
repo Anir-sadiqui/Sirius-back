@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IPatientrepository extends org.springframework.data.jpa.repository.JpaRepository<Patient, Long> {
+public interface IPatientrepository extends ICrudRepository<Patient, Long> {
 
     List<Patient> findByNom(String name) ;
 
