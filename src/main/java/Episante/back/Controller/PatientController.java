@@ -1,7 +1,7 @@
 package Episante.back.Controller;
 
-import Episante.back.DAO.IPatientDao;
-import Episante.back.Entity.Patient;
+import Episante.back.Repository.IPatientrepository;
+import Episante.back.Models.Patient;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class PatientController {
 
 
     @Autowired
-    private IPatientDao patientDao;
+    private IPatientrepository patientDao;
 
     @GetMapping
     public List<Patient> getAllPatients() {
