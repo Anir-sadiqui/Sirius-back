@@ -1,6 +1,6 @@
 package Episante.back.Controller;
 
-import Episante.back.Entity.RendezVous;
+import Episante.back.Models.RendezVous;
 import Episante.back.Service.RendezVousService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

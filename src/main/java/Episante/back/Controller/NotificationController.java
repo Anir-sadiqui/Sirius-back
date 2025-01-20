@@ -1,6 +1,6 @@
 package Episante.back.Controller;
 
-import Episante.back.Entity.Notification;
+import Episante.back.Models.Notification;
 import Episante.back.Service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

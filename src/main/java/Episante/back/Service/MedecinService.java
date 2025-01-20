@@ -1,7 +1,7 @@
 package Episante.back.Service;
 
-import Episante.back.DAO.IMedecinDao;
-import Episante.back.Entity.Medecin;
+import Episante.back.Repository.IMedecinDao;
+import Episante.back.Models.Medecin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
