@@ -1,26 +1,34 @@
-package Episante.back.Models;
+package Episante.back.Entity;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 public class RendezVous {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime dateHeure;
+    private LocalDate date;
+    private LocalTime heure;
 
-    @ManyToOne
-    @JoinColumn(name = "medecin_id")
-    private Medecin medecin;
+    @Enumerated(EnumType.STRING)
+    private StatutRendezVous statut;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @ManyToOne
+    @JoinColumn(name = "medecin_id")
+    private Medecin medecin;
+
+    @OneToMany(mappedBy = "rendezVous", cascade = CascadeType.ALL)
+    private List<Notification> notifications;
+
+    // Getters et setters
     public Long getId() {
         return id;
     }
@@ -29,12 +37,36 @@ public class RendezVous {
         this.id = id;
     }
 
-    public LocalDateTime getDateHeure() {
-        return dateHeure;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setDateHeure(LocalDateTime dateHeure) {
-        this.dateHeure = dateHeure;
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getHeure() {
+        return heure;
+    }
+
+    public void setHeure(LocalTime heure) {
+        this.heure = heure;
+    }
+
+    public StatutRendezVous getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutRendezVous statut) {
+        this.statut = statut;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public Medecin getMedecin() {
@@ -45,12 +77,12 @@ public class RendezVous {
         this.medecin = medecin;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }
 

@@ -1,9 +1,6 @@
-package Episante.back.Models;
+package Episante.back.Entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,17 +9,17 @@ public class Medecin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nom;       // Champ pour le nom du médecin
-    private String specialite; // Champ pour la spécialité du médecin
+    private String nom;
+    private String prenom;
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    private Specialite specialite;
 
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Disponibilite> disponibilites = new ArrayList<>();
+    private List<RendezVous> rendezVous;
 
-    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
-    private List<RendezVous> rdvs;
-
-    // Getters et Setters
+    // Getters et setters
     public Long getId() {
         return id;
     }
@@ -39,27 +36,36 @@ public class Medecin {
         this.nom = nom;
     }
 
-    public String getSpecialite() {
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Specialite getSpecialite() {
         return specialite;
     }
 
-    public void setSpecialite(String specialite) {
+    public void setSpecialite(Specialite specialite) {
         this.specialite = specialite;
     }
 
-    public List<Disponibilite> getDisponibilites() {
-        return disponibilites;
+    public List<RendezVous> getRendezVous() {
+        return rendezVous;
     }
 
-    public void setDisponibilites(List<Disponibilite> disponibilites) {
-        this.disponibilites = disponibilites;
-    }
-
-    public List<RendezVous> getRdvs() {
-        return rdvs;
-    }
-
-    public void setRdvs(List<RendezVous> rdvs) {
-        this.rdvs = rdvs;
+    public void setRendezVous(List<RendezVous> rendezVous) {
+        this.rendezVous = rendezVous;
     }
 }
+

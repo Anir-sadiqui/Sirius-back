@@ -1,21 +1,23 @@
-package Episante.back.config;
-
-import org.springframework.boot.SpringBootConfiguration;
+package Episante.back;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootConfiguration
+@Configuration
 public class SpringConfiguration implements WebMvcConfigurer {
-    @Override   
+    @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins(
-                        "http://localhost:5173",
-                        "http://172.31.249.181:3000" // for the front end vm
-                )
-                .allowedMethods("*");
+        registry.addMapping("/**") // Autorise tous les endpoints
+                .allowedOrigins("http://localhost:5174") // URL du front-end
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Méthodes HTTP autorisées
+                .allowedHeaders("*") // Autorise tous les en-têtes
+                .allowCredentials(true); // Si des cookies ou des sessions sont utilisés
     }
 }
+
+
+
+
 
 
 
