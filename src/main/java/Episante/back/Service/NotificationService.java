@@ -1,7 +1,7 @@
 package Episante.back.Service;
 
-import Episante.back.DAO.INotificationDao;
-import Episante.back.Entity.Notification;
+import Episante.back.Repository.INotificationDao;
+import Episante.back.Models.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

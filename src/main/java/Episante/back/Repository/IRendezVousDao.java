@@ -1,6 +1,6 @@
-package Episante.back.DAO;
+package Episante.back.Repository;
 
-import Episante.back.Entity.RendezVous;
+import Episante.back.Models.RendezVous;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IRendezVousDao extends JpaRepository<RendezVous, Long> {

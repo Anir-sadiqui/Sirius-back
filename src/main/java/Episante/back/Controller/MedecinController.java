@@ -1,6 +1,6 @@
 package Episante.back.Controller;
 
-import Episante.back.Entity.Medecin;
+import Episante.back.Models.Medecin;
 import Episante.back.Service.MedecinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

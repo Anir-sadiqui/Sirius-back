@@ -1,7 +1,7 @@
 package Episante.back.Service;
 
-import Episante.back.DAO.IRendezVousDao;
-import Episante.back.Entity.RendezVous;
+import Episante.back.Repository.IRendezVousDao;
+import Episante.back.Models.RendezVous;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

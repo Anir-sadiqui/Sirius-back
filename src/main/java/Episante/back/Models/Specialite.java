@@ -1,4 +1,4 @@
-package Episante.back.Entity;
+package Episante.back.Models;
 
 public enum Specialite {
     CARDIOLOGIE,
