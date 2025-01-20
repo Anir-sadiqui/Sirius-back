@@ -1,4 +1,4 @@
-package Episante.back.Models;
+package Episante.back.Entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

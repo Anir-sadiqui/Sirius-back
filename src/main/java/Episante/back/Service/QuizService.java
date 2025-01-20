@@ -1,8 +1,8 @@
 package Episante.back.Service;
 
 
-import Episante.back.Repository.QuestionRepository;
-import Episante.back.Models.Question;
+import Episante.back.DAO.QuestionRepository;
+import Episante.back.Entity.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package Episante.back.Controller;
 
-import Episante.back.Models.Question;
+import Episante.back.Entity.Question;
 import Episante.back.Service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
