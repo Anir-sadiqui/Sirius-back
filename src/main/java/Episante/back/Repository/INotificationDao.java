@@ -1,6 +1,6 @@
-package Episante.back.DAO;
+package Episante.back.Repository;
 
-import Episante.back.Entity.Notification;
+import Episante.back.Models.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface INotificationDao extends JpaRepository<Notification, Long> {
