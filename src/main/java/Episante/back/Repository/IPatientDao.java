@@ -1,6 +1,6 @@
-package Episante.back.DAO;
+package Episante.back.Repository;
 
-import Episante.back.Entity.Patient;
+import Episante.back.Models.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

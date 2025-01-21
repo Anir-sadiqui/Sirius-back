@@ -1,6 +1,6 @@
-package Episante.back.DAO;
+package Episante.back.Repository;
 
-import Episante.back.Entity.Question;
+import Episante.back.Models.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

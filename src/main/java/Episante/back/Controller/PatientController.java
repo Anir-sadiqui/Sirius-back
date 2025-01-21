@@ -1,7 +1,7 @@
 package Episante.back.Controller;
 
-import Episante.back.DAO.IPatientDao;
-import Episante.back.Entity.Patient;
+import Episante.back.Repository.IPatientDao;
+import Episante.back.Models.Patient;
 import Episante.back.Service.PatientService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

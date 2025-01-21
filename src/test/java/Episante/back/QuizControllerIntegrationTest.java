@@ -1,6 +1,6 @@
 package Episante.back;
 
-import Episante.back.Entity.Question;
+import Episante.back.Models.Question;
 import Episante.back.Service.QuizService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

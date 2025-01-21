@@ -1,7 +1,6 @@
-package Episante.back.Entity;
+package Episante.back.Models;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
 
 import java.sql.Timestamp;
 
