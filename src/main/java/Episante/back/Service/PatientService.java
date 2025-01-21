@@ -1,7 +1,7 @@
 package Episante.back.Service;
 
-import Episante.back.DAO.IPatientDao;
-import Episante.back.Entity.Patient;
+import Episante.back.Repository.IPatientDao;
+import Episante.back.Models.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
