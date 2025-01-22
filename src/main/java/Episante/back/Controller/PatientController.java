@@ -57,24 +57,24 @@ public class PatientController {
 //        return patientDao.save(patient);
 //
 //    }
-    @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id , @Valid @RequestBody Patient patientDetails) {
-        Patient patient = patientService.findById(id).orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
-        BeanUtils.copyProperties(patientDetails, patient); // with copyProperties method you just copy the propreties of your Patient to avoid setters
-        Patient updatedPatient = patientDao.save(patient);
-        logger.info("Patient updated successfully: {}", updatedPatient.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(updatedPatient);
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Patient> updatePatient(@PathVariable Long id , @Valid @RequestBody Patient patientDetails) {
+//        Patient patient = patientService.findById(id).orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
+//        BeanUtils.copyProperties(patientDetails, patient); // with copyProperties method you just copy the propreties of your Patient to avoid setters
+//        Patient updatedPatient = patientDao.save(patient);
+//        logger.info("Patient updated successfully: {}", updatedPatient.getId());
+//        return ResponseEntity.status(HttpStatus.OK).body(updatedPatient);
+//    }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Patient> deletePatient(@PathVariable Long id) {
-        if(!patientDao.existsById(id)) {
-            logger.error("Patient not found with id: " + id);
-        }
-        patientDao.deleteById(id);
-        logger.info("Patient deleted successfully: {}", id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Patient> deletePatient(@PathVariable Long id) {
+//        if(!patientDao.existsById(id)) {
+//            logger.error("Patient not found with id: " + id);
+//        }
+//        patientDao.deleteById(id);
+//        logger.info("Patient deleted successfully: {}", id);
+//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//    }
 
 }
