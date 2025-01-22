@@ -6,10 +6,7 @@ import Episante.back.Models.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class QuizService {
@@ -21,20 +18,10 @@ public class QuizService {
     private int currentQuestionIndex = 0;
     private Map<Long, String> userAnswers = new HashMap<>();
 
-    // Initialize questions (can be loaded from DB or hardcoded)
-    public void initializeQuestions() {
-        // Example of hardcoding questions
-        questions = new ArrayList<>();
-        questions.add(new Question("How old are you?"));
-        questions.add(new Question("What is your IQ?"));
-        questions.add(new Question("What is your favorite color?"));
-        // Or load from the database
-        // questions = questionRepository.findAll();
-    }
 
     public Question getNextQuestion() {
         if (questions == null || questions.isEmpty()) {
-            initializeQuestions(); // Initialize if not already done
+            questions = questionRepository.findAll(); // Load from DB only if not initialized
         }
         if (currentQuestionIndex < questions.size()) {
             return questions.get(currentQuestionIndex++);
@@ -47,36 +34,158 @@ public class QuizService {
     }
 
     public String calculateResult() {
-        // Implement your logic to determine the result based on userAnswers
-        // Example:
-        int smartPoints = 0;
-        int simplePoints = 0;
-        int stupidPoints = 0;
-
+        if (questions == null || questions.isEmpty()) {
+            questions = questionRepository.findAll(); // Load from DB if not initialized
+        }
+        int score = 0;
         for (Map.Entry<Long, String> entry : userAnswers.entrySet()) {
             Long questionId = entry.getKey();
-            String answer = entry.getValue().toLowerCase(); // Example: lowercase for comparison
+            String userAnswer = entry.getValue().toLowerCase().trim();
+            Optional<Question> question = questionRepository.findById(questionId);
 
-            // Example scoring logic (you'll need to customize this)
-            if (questionId == 2 && answer.contains("above 120")) { // Assuming question with id 2 is about IQ
-                smartPoints++;
-            } else if (answer.contains("yes") || answer.contains("no")) {
-                simplePoints++;
-            } else {
-                stupidPoints++;
+            if(question.isPresent())
+            {
+                Question currentQuestion = question.get();
+                if(currentQuestion.getQuestionText().equals("What is your age?"))
+                {
+                    try {
+                        int age = Integer.parseInt(userAnswer);
+                        if(age > 18 && age < 65) {
+                            score+=20;
+                        } else {
+                            score -=20;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle invalid format, you can print a message in the console
+                        score-=10;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("What is your weight?"))
+                {
+                    try {
+                        int weight = Integer.parseInt(userAnswer);
+                        if(weight > 60 && weight < 100) {
+                            score+=20;
+                        } else {
+                            score-=20;
+                        }
+                    }catch (NumberFormatException e) {
+                        // Handle invalid format, you can print a message in the console
+                        score-=10;
+                    }
+
+                }
+                if(currentQuestion.getQuestionText().equals("What is your height?"))
+                {
+                    try {
+                        int height = Integer.parseInt(userAnswer);
+                        if(height > 150 && height < 200) {
+                            score+=20;
+                        } else {
+                            score-=20;
+                        }
+                    }catch (NumberFormatException e) {
+                        // Handle invalid format, you can print a message in the console
+                        score-=10;
+                    }
+
+                }
+                if(currentQuestion.getQuestionText().equals("What is your sex?"))
+                {
+                    if(userAnswer.equals("male") || userAnswer.equals("female")) {
+                        score += 10;
+                    } else {
+                        score -= 10;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("How many miles do you walk/run per day?"))
+                {
+                    try {
+                        int miles = Integer.parseInt(userAnswer);
+                        if(miles > 2) {
+                            score += 20;
+                        } else {
+                            score-=20;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle invalid format, you can print a message in the console
+                        score-=10;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("Do you smoke?"))
+                {
+                    if(userAnswer.equals("no")) {
+                        score += 30;
+                    } else {
+                        score -= 30;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("How many hours do you sleep per day?"))
+                {
+                    try {
+                        int sleepHours = Integer.parseInt(userAnswer);
+                        if(sleepHours > 7 && sleepHours < 9) {
+                            score += 20;
+                        }else {
+                            score-=20;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle invalid format, you can print a message in the console
+                        score-=10;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("Do you have a history of heart disease in your family?"))
+                {
+                    if(userAnswer.equals("no")) {
+                        score += 20;
+                    }else {
+                        score -= 20;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("How many liters of water do you drink per day?"))
+                {
+                    try {
+                        int waterLiters = Integer.parseInt(userAnswer);
+                        if(waterLiters >= 2) {
+                            score += 20;
+                        } else {
+                            score -= 20;
+                        }
+                    } catch (NumberFormatException e) {
+                        // Handle invalid format, you can print a message in the console
+                        score -= 10;
+                    }
+                }
+                if(currentQuestion.getQuestionText().equals("Do you have any known allergies?"))
+                {
+                    if(userAnswer.equals("no")) {
+                        score += 10;
+                    }else {
+                        score -= 10;
+                    }
+                }
             }
+
+
         }
 
-        if (smartPoints > simplePoints && smartPoints > stupidPoints) {
-            return "You are smart!";
-        } else if (simplePoints > smartPoints && simplePoints > stupidPoints) {
-            return "You are simple.";
-        } else {
-            return "You are... interesting."; // Or "stupid" if you prefer
-        }
+
+        if(score >= 150)
+            return "Super good health";
+        else if(score >= 100)
+            return "Good health";
+        else if(score >= 50)
+            return "Okay health";
+        else if(score >= 0)
+            return "Poor health";
+        else return "Very poor health";
     }
 
+
     public boolean hasMoreQuestions() {
+        if (questions == null || questions.isEmpty()) {
+            questions = questionRepository.findAll(); // Load from DB if not initialized
+        }
         return currentQuestionIndex < questions.size();
     }
 
