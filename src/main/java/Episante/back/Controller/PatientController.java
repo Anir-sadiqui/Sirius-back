@@ -51,7 +51,7 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<Map<String, Object>> getPatientInfo(@Valid @RequestBody Map<String, String> request) {
         String email = request.get("email");
         if (email == null || email.isEmpty()) {
@@ -81,7 +81,7 @@ public class PatientController {
     }
 
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<PatientBilanDTO> generatePatientBilan(@Valid @RequestBody Patient patient) {
         try {
             String bilan = patientService.BilanS(patient);
