@@ -1,6 +1,6 @@
 package Episante.back.Service;
 
-import Episante.back.Repository.IRendezVousDao;
+import Episante.back.Repository.RendezVousRepository;
 import Episante.back.Models.RendezVous;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import java.util.List;
 public class RendezVousService {
 
     @Autowired
-    private IRendezVousDao rendezVousDao;
+    private RendezVousRepository rendezVousDao;
 
     public List<RendezVous> getAllRendezVous() {
         return rendezVousDao.findAll();
