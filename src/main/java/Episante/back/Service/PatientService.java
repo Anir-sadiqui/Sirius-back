@@ -4,17 +4,26 @@ package Episante.back.Service;
 import Episante.back.Models.Patient;
 import Episante.back.Models.Sexe;
 import Episante.back.Repository.IPatientrepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Data
 @Service
 public class PatientService {
 
+
+
     @Autowired
-    private IPatientrepository patientDao;
+    private IPatientrepository patientDao ;
+
+    public void add(Patient patient) {
+        patientDao.save(patient);
+    }
 
     public List<Patient> getAllPatients() {return patientDao.findAll();}
     public Optional<Patient> getById(long id) {return patientDao.findById(id);}
@@ -43,20 +52,41 @@ public class PatientService {
     }
 
     public Boolean Login(String email, String password) {
-        if (!patientDao.existsByEmail(email)); {
-            throw new IllegalArgumentException("Cet email n'existe pas! !");
+        if (!patientDao.existsByEmail(email)) {
+            throw new IllegalArgumentException("Cet email n'existe pas!");
         }
-        if (password.equals(patientDao.findByEmail(email).getMdp())) {
-            return true;
-        }
-        return false;
+        return password.equals(patientDao.findByEmail(email).getMdp());
     }
 
 
     public String BilanS(Patient patient) {
-        double poids = Double.parseDouble(patient.getPoids());
-        double taille = Double.parseDouble(patient.getTaille());
+        // Vérifier que le patient n'est pas null
+        if (patient == null) {
+            throw new IllegalArgumentException("Le patient ne peut pas être null.");
+        }
+
+        // Convertir le poids, la taille et l'âge en nombres
+        double poids;
+        double taille;
+        int age;
+
+        try {
+            poids = Double.parseDouble(patient.getPoids());
+            taille = Double.parseDouble(patient.getTaille()) / 100; // Convertir en mètres
+            age = Integer.parseInt(patient.getAge());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Les valeurs de poids, taille ou âge sont invalides.");
+        }
+
+        // Vérifier que les valeurs sont positives
+        if (poids <= 0 || taille <= 0 || age <= 0) {
+            throw new IllegalArgumentException("Les valeurs de poids, taille et âge doivent être positives.");
+        }
+
+        // Calculer l'IMC
         double imc = poids / (taille * taille);
+
+        // Définir les seuils en fonction du sexe et de l'âge
         double seuilInsuffisance = 18.5;
         double seuilNormal = 24.9;
 
@@ -65,10 +95,11 @@ public class PatientService {
             seuilNormal = 24.5;
         }
 
-        if (patient.getAge() > 65) {
+        if (age > 65) {
             seuilNormal = 27.0;
         }
 
+        // Déterminer le bilan en fonction de l'IMC
         String bilan;
         if (imc < seuilInsuffisance) {
             bilan = String.format(
@@ -101,7 +132,6 @@ public class PatientService {
 
         return bilan;
     }
-
 
     }
 
