@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -16,13 +17,15 @@ public class PatientService {
     private IPatientrepository patientDao;
 
     public List<Patient> getAllPatients() {return patientDao.findAll();}
+    public Optional<Patient> getById(long id) {return patientDao.findById(id);}
     public List<Patient> getPatientByName(String name) {return patientDao.findByNom(name);}
     public List<Patient> getPatientByPrenom(String prenom) {return patientDao.findByPrenom(prenom);}
-    public void deletePatient(Patient patient) {
-        if (patient == null) {
-            throw new IllegalArgumentException("utilisateur introuvable");
-        }
-        patientDao.delete(patient);}
+
+    public void deletePatient(Optional<Patient> patient) {
+        Patient patientEntity = patient.orElseThrow(() ->
+                new IllegalArgumentException("Utilisateur introuvable"));
+        patientDao.delete(patientEntity);
+    }
     public void Inscription(Patient patient) {
         if (patientDao.existsByEmail(patient.getEmail())) {
             throw new IllegalArgumentException("Cet email est déjà utilisé !");
@@ -32,6 +35,23 @@ public class PatientService {
         }
         patientDao.save(patient);
     }
+    public Patient getByEmail(String email) {
+        if (!patientDao.existsByEmail(email)) {
+            throw new IllegalArgumentException("Cet email n'existe pas!");
+        }
+        return patientDao.findByEmail(email);
+    }
+
+    public Boolean Login(String email, String password) {
+        if (!patientDao.existsByEmail(email)); {
+            throw new IllegalArgumentException("Cet email n'existe pas! !");
+        }
+        if (password.equals(patientDao.findByEmail(email).getMdp())) {
+            return true;
+        }
+        return false;
+    }
+
 
     public String BilanS(Patient patient) {
         double poids = Double.parseDouble(patient.getPoids());
