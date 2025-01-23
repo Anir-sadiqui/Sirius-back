@@ -1,6 +1,6 @@
 package Episante.back.Models;
 
-
+import Episante.back.Models.Medecin;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -28,10 +28,6 @@ public class Disponibilite {
 
     public LocalDateTime getDebut() {
         return debut;
-    }
-
-    public void setDebut() {
-        this.debut = debut;
     }
 
     public void setDebut(LocalDateTime debut) {

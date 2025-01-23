@@ -24,10 +24,10 @@ public class PatientController {
         return patientService.savePatient(patient);
     }
 
-    @PutMapping("/{id}")
-    public Patient updatePatient(@PathVariable Long id, @RequestBody Patient patientDetails) {
-        return patientService.updatePatient(id, patientDetails);
-    }
+   // @PutMapping("/{id}")
+ //   public Patient updatePatient(@PathVariable Long id, @RequestBody Patient patientDetails) {
+ //       return patientService.updatePatient(id, patientDetails);
+   // }
 
     @DeleteMapping("/{id}")
     public void deletePatient(@PathVariable Long id) {
