@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:5173")
 
 @RestController
 @RequestMapping("/api/patients")
@@ -35,11 +35,16 @@ public class PatientController {
 
 
     //using the ResponseEntity to see the status of the request
-    @PostMapping
-    public ResponseEntity<Patient> createPatient(@Valid @RequestBody Patient patient) {
+    @PostMapping("/register")
+    public void createPatient(@Valid @RequestBody Patient patient) {
         patientService.Inscription(patient);
         logger.info("Patient created successfully: {}", patient.getNom() + " " + patient.getPrenom());
-        return ResponseEntity.status(HttpStatus.CREATED).body(patient);
+    }
+
+    @PostMapping("/login")
+    public void logPatient(@Valid @RequestBody String email, @Valid @RequestBody String password) {
+        patientService.Login(email, password);
+        logger.info("Patient logged in successfully: {}", patientService.getByEmail(email).getNom() + " " + patientService.getByEmail(email).getPrenom());
     }
 
 
@@ -51,16 +56,18 @@ public class PatientController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping
-    public ResponseEntity<Map<String, Object>> getPatientInfo(@Valid @RequestBody Map<String, String> request) {
-        String email = request.get("email");
+    @GetMapping("/info")
+    public ResponseEntity<Map<String, Object>> getPatientInfo(@RequestParam String email) {
+        logger.info("Requête reçue pour l'email : {}", email);
         if (email == null || email.isEmpty()) {
+            logger.error("Email manquant ou vide");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", "L'email est requis"));
         }
 
         Patient patient = patientService.getByEmail(email);
         if (patient == null) {
+            logger.error("Patient introuvable pour l'email : {}", email);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Patient introuvable avec l'email fourni"));
         }
@@ -77,13 +84,14 @@ public class PatientController {
                 "age", patient.getAge()
         );
 
+        logger.info("Informations du patient récupérées : {}", patientInfo);
         return ResponseEntity.status(HttpStatus.OK).body(patientInfo);
     }
 
-
-    @GetMapping
-    public ResponseEntity<PatientBilanDTO> generatePatientBilan(@Valid @RequestBody Patient patient) {
+    @GetMapping("/bilan")
+    public ResponseEntity<PatientBilanDTO> generatePatientBilan(@Valid @RequestParam String email) {
         try {
+            Patient patient = patientService.getByEmail(email);
             String bilan = patientService.BilanS(patient);
             PatientBilanDTO bilanDTO = new PatientBilanDTO(patient.getNom(), patient.getPrenom(), bilan);
             return ResponseEntity.status(HttpStatus.OK).body(bilanDTO);

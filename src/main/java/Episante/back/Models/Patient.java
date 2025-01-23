@@ -12,7 +12,7 @@ public class Patient {
     private long id;
     private String nom;
     private String prenom;
-    private int age;
+    private String age;
     private String adresse;
     @Column(unique = true, nullable = false)
     private String email;
