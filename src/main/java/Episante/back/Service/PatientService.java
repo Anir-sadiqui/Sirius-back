@@ -6,7 +6,6 @@ import Episante.back.Models.Sexe;
 import Episante.back.Repository.IPatientrepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,11 +50,11 @@ public class PatientService {
         return patientDao.findByEmail(email);
     }
 
-    public Boolean Login(String email, String password) {
-        if (!patientDao.existsByEmail(email)) {
-            throw new IllegalArgumentException("Cet email n'existe pas!");
+    public void Login(String email, String password) {
+        Patient patient = patientDao.findByEmail(email);
+        if (patient == null || !patient.getMdp().equals(password)) {
+            throw new IllegalArgumentException("Email ou mot de passe incorrect");
         }
-        return password.equals(patientDao.findByEmail(email).getMdp());
     }
 
 

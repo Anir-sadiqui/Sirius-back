@@ -1,5 +1,6 @@
 package Episante.back.Controller;
 
+import Episante.back.DTO.LoginDTO;
 import Episante.back.DTO.PatientBilanDTO;
 import Episante.back.Models.Patient;
 import Episante.back.Service.PatientService;
@@ -42,9 +43,15 @@ public class PatientController {
     }
 
     @PostMapping("/login")
-    public void logPatient(@Valid @RequestBody String email, @Valid @RequestBody String password) {
-        patientService.Login(email, password);
-        logger.info("Patient logged in successfully: {}", patientService.getByEmail(email).getNom() + " " + patientService.getByEmail(email).getPrenom());
+    public ResponseEntity<String> logPatient(@Valid @RequestBody LoginDTO loginRequest) {
+        try {
+            patientService.Login(loginRequest.getEmail(), loginRequest.getPassword());
+            logger.info("Patient logged in successfully: {}", patientService.getByEmail(loginRequest.getEmail()).getNom() + " " + patientService.getByEmail(loginRequest.getEmail()).getPrenom());
+            return ResponseEntity.ok("Connexion réussie");
+        } catch (Exception e) {
+            logger.error("Erreur lors de la connexion : {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email ou mot de passe incorrect");
+        }
     }
 
 
