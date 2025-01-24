@@ -20,7 +20,7 @@ public class DisponibiliteServiceImpl implements DisponibiliteService {
 
     @Override
     public List<Disponibilite> getAllDisponibilites() {
-        return disponibiliteRepository.findAll();
+        return disponibiliteRepository.findAllWithMedecin();
     }
 
     @Override

@@ -1,7 +1,9 @@
 package Episante.back.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,7 +16,8 @@ public class Medecin {
     private String specialite; // Champ pour la spécialité du médecin
 
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
-    private List<Disponibilite> disponibilites;
+    @JsonManagedReference
+    private List<Disponibilite> disponibilites = new ArrayList<>();
 
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
     private List<RendezVous> rdvs;

@@ -44,6 +44,17 @@ public class DataLoader {
         medecin3.setSpecialite("Pediatrician");
         medecinRepository.save(medecin3);
 
+
+        Medecin medecin4 = new Medecin();
+        medecin4.setNom("Dr. Brown");
+        medecin4.setSpecialite("Gynécologue");
+        medecinRepository.save(medecin4);
+
+        Medecin medecin5 = new Medecin();
+        medecin5.setNom("Dr. Davis");
+        medecin5.setSpecialite("Orthopédiste");
+        medecinRepository.save(medecin5);
+
         // Create some availabilities for Dr. Smith
         Disponibilite disponibilite1 = new Disponibilite();
         disponibilite1.setDebut(LocalDateTime.of(2024, 3, 5, 9, 0));
@@ -70,6 +81,20 @@ public class DataLoader {
         disponibilite4.setFin(LocalDateTime.of(2024, 3, 7, 16, 0));
         disponibilite4.setMedecin(medecin2);
         rendezVousService.createDisponibilite(disponibilite4);
+
+        // Créer des disponibilités pour Dr. Brown
+        Disponibilite disponibilite6 = new Disponibilite();
+        disponibilite6.setDebut(LocalDateTime.of(2024, 3, 9, 9, 0));
+        disponibilite6.setFin(LocalDateTime.of(2024, 3, 9, 12, 0));
+        disponibilite6.setMedecin(medecin4);
+        rendezVousService.createDisponibilite(disponibilite6);
+
+        // Créer des disponibilités pour Dr. Davis
+        Disponibilite disponibilite7 = new Disponibilite();
+        disponibilite7.setDebut(LocalDateTime.of(2024, 3, 10, 14, 0));
+        disponibilite7.setFin(LocalDateTime.of(2024, 3, 10, 17, 0));
+        disponibilite7.setMedecin(medecin5);
+        rendezVousService.createDisponibilite(disponibilite7);
 
 
         // Create some patients
