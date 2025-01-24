@@ -31,9 +31,7 @@ pipeline {
        stage('Deploy to Server') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'ssh-credentials-id', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-                        sh '''
-                        sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@172.31.249.90 "nohup java -jar agent/workspace/back-jfile/target/Episante-back-1.0-SNAPSHOT.jar > /dev/null 2>&1 & exit"
+                    "nohup java -jar agent/workspace/back-jfile/target/Episante-back-1.0-SNAPSHOT.jar > /dev/null 2>&1 & exit"
                         '''
                     }
         }
