@@ -10,17 +10,9 @@ import Episante.back.Service.MedecinService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
-import java.util.*;
-import java.util.stream.Collectors;
-
-
-//import org.springframework.web.bind.annotation.CrossOrigin;
-////
-//// Ajoutez cette annotation au-dessus de votre contrôleur
-//@CrossOrigin(origins = "http://localhost:5173") // Port de votre frontend React
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/medecins")
@@ -45,6 +37,7 @@ public class MedecinController {
         return medecinService.getMedecinAvecDisponibilites(id);
     }
 
+
     // Endpoint pour créer un médecin
     @PostMapping("/creer-en-masse?nombre=10")
     public Medecin creerMedecin(@RequestBody Medecin medecin) {
@@ -54,14 +47,6 @@ public class MedecinController {
     @GetMapping("/specialite/{specialite}")
     public List<Medecin> getMedecinsParSpecialite(@PathVariable Specialite specialite) {
         return medecinRepository.findBySpecialite(specialite);
-    }
-
-    @GetMapping("/specialites")
-    public ResponseEntity<List<String>> getAllSpecialites() {
-        List<String> specialites = Arrays.stream(Specialite.values())
-                .map(Enum::name)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(specialites);
     }
     @PostMapping("/creer-en-masse")
     public ResponseEntity<List<Medecin>> creerMedecinsEnMasse(@RequestParam int nombre) {
@@ -116,38 +101,4 @@ public class MedecinController {
 
         return ResponseEntity.ok(disponibilites);
     }
-
-@GetMapping("/disponibilitess")
-public ResponseEntity<List<Map<String, Object>>> getDisponibilites(
-        @RequestParam(required = false) Long medecinId) {
-
-    List<Disponibilite> disponibilites;
-
-    if (medecinId != null) {
-        disponibilites = disponibiliteRepository.findByMedecinId(medecinId);
-    } else {
-        disponibilites = disponibiliteRepository.findAll();
-    }
-
-    // 🔥 Transformation des disponibilités avec date au format "YYYY-MM-DD"
-    List<Map<String, Object>> disponibilitesFormatees = disponibilites.stream().map(dispo -> {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", dispo.getId());
-        map.put("date", convertJourToDate(dispo.getJour())); // Nouvelle fonction pour convertir en date
-        map.put("periode", dispo.getPeriode());
-        return map;
-    }).collect(Collectors.toList());
-
-    return ResponseEntity.ok(disponibilitesFormatees);
-}
-
-// 🔹 Convertir JourSemaine en une vraie date au format "YYYY-MM-DD"
-private String convertJourToDate(JourSemaine jour) {
-    LocalDate today = LocalDate.now();
-    int targetDay = jour.ordinal() + 1; // Lundi = 1, Mardi = 2, etc.
-
-    // Trouver le prochain jour correspondant
-    LocalDate nextDate = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.of(targetDay)));
-    return nextDate.toString(); // Format "YYYY-MM-DD"
-}
 }
