@@ -2,50 +2,21 @@ package Episante.back.Models;
 
 import jakarta.persistence.*;
 import java.util.List;
+import lombok.Data;
 
 
+@Data
 @Entity
 public class Medecin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nom;       // Champ pour le nom du médecin
-    private String specialite; // Champ pour la spécialité du médecin
+    private String nom;
 
-    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
+    @Enumerated(EnumType.STRING) // Pour stocker l'enum comme une chaîne de caractères dans la base de données
+    private Specialite specialite;
+
+    @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Disponibilite> disponibilites;
-
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getSpecialite() {
-        return specialite;
-    }
-
-    public void setSpecialite(String specialite) {
-        this.specialite = specialite;
-    }
-
-    public List<Disponibilite> getDisponibilites() {
-        return disponibilites;
-    }
-
-    public void setDisponibilites(List<Disponibilite> disponibilites) {
-        this.disponibilites = disponibilites;
-    }
 }
