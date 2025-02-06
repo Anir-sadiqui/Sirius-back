@@ -6,6 +6,7 @@ import Episante.back.Repository.DisponibiliteRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -69,6 +70,10 @@ public class MedecinService {
         return medecinRepository.saveAll(medecins);
     }
 
-
-
+    public List<Specialite> getAllSpecialites() {
+        return Arrays.asList(Specialite.values());
+    }
+    public List<Medecin> getMedecinsParSpecialite(Specialite specialite) {
+        return medecinRepository.findBySpecialite(specialite);
+    }
 }

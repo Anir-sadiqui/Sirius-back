@@ -1,6 +1,7 @@
 package Episante.back.Models;
 
 import Episante.back.Models.Medecin;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class Disponibilite {
     private Periode periode;
 
     @ManyToOne
+    @JsonIgnore // javais un probleme de boucle infnini ::pour ignorer la référence au Medecin
     @JoinColumn(name = "medecin_id")
     private Medecin medecin;
 
