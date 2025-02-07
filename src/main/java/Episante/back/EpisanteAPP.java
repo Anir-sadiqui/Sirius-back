@@ -19,21 +19,21 @@ public class EpisanteAPP {
 		SpringApplication.run(EpisanteAPP.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner run() {
-		return args -> {
-			Patient patient = new Patient();
-			patient.setAdresse("Paris");
-			patient.setAge("21");
-			patient.setEmail("anirsadiqui2@gmail.com");
-			patient.setPrenom("Anir");
-			patient.setNom("Anir");
-			patient.setSexe(Sexe.HOMME);
-			patient.setTelephone("1234567890");
-			patient.setPoids("73");
-			patient.setTaille("183");
-			patient.setMdp("Anir2003");
-//			patientService.add(patient);
-		};
-	}
+//	@Bean
+//	public CommandLineRunner run() {
+//		return args -> {
+//			Patient patient = new Patient();
+//			patient.setAdresse("Paris");
+//			patient.setAge("21");
+//			patient.setEmail("anirsadiqui2@gmail.com");
+//			patient.setPrenom("Anir");
+//			patient.setNom("Anir");
+//			patient.setSexe(Sexe.HOMME);
+//			patient.setTelephone("1234567890");
+//			patient.setPoids("73");
+//			patient.setTaille("183");
+//			patient.setMdp("Anir2003");
+////			patientService.add(patient);
+//		};
+//	}
 }

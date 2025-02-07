@@ -1,13 +1,15 @@
 package Episante.back.Service;
 
 import Episante.back.Models.*;
+import Episante.back.Repository.IPatientrepository;
 import Episante.back.Repository.MedecinRepository;
 import Episante.back.Repository.DisponibiliteRepository;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 
 @Service
 public class MedecinService {
@@ -69,6 +71,10 @@ public class MedecinService {
         return medecinRepository.saveAll(medecins);
     }
 
-
-
+    public List<Specialite> getAllSpecialites() {
+        return Arrays.asList(Specialite.values());
+    }
+    public List<Medecin> getMedecinsParSpecialite(Specialite specialite) {
+        return medecinRepository.findBySpecialite(specialite);
+    }
 }

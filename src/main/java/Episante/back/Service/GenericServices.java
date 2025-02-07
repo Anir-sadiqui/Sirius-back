@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 
+
 public class GenericServices {
     public static <T> String miseAJourGenerique(T cible, Map<String, Object> MAJ) {
         StringBuilder resultats = new StringBuilder("Résultats de la mise à jour :\n");
