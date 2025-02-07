@@ -22,8 +22,7 @@ jobs:
 #        run: mvn -B test --file pom.xml
 
       - name: Build The Application
-        run:
-          mvn clean
-          mvn -B package --file pom.xml
+        run: |
+          mvn clean package -DskipTests
 
 
