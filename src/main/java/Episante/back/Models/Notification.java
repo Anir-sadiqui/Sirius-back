@@ -1,8 +1,10 @@
 package Episante.back.Models;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import lombok.Data;
 
+import java.time.LocalDate;
+@Data
 @Entity
 public class Notification {
 
@@ -10,32 +12,13 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date; // Date de la notification
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "rendezVous_id", nullable = false)
-    private RendezVous rendezVous; // Liée à un rendez-vous
+    private RendezVous rendezVous;
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public RendezVous getRendezVous() {
-        return rendezVous;
-    }
 
     public void setRendezVous(RendezVous rendezVous) {
         this.rendezVous = rendezVous;
