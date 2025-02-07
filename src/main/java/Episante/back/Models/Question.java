@@ -11,9 +11,9 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String questionText;
-    private String questionType; // "number", "select", "text"
-    private String options; // Comma-separated options for select questions (e.g., "Male,Female,Other")
-    private String unit; // Unit for numeric input if any (e.g., "kg", "cm", "years")
+    private String questionType;
+    private String options;
+    private String unit;
 
     public Question() {
     }

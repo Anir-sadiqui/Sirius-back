@@ -24,17 +24,17 @@ public class MedecinService {
         List<Medecin> medecins = medecinRepository.findAll();
         Random random = new Random();
 
-        JourSemaine[] jours = JourSemaine.values(); // Lundi - Vendredi
-        Periode[] periodes = Periode.values(); // Matin, Soir
+        JourSemaine[] jours = JourSemaine.values();
+        Periode[] periodes = Periode.values();
 
         for (Medecin medecin : medecins) {
-            int nbJours = random.nextInt(5) + 1; // Nombre de jours de disponibilité (1 à 5)
+            int nbJours = random.nextInt(5) + 1;
 
             for (int i = 0; i < nbJours; i++) {
-                JourSemaine jour = jours[random.nextInt(jours.length)]; // Jour aléatoire entre Lundi et Vendredi
-                Periode periode = periodes[random.nextInt(periodes.length)]; // Matin ou Soir
+                JourSemaine jour = jours[random.nextInt(jours.length)];
+                Periode periode = periodes[random.nextInt(periodes.length)];
 
-                // Vérifier si la disponibilité existe déjà
+
                 if (disponibiliteRepository.findByMedecinAndJourAndPeriode(medecin, jour, periode).isEmpty()) {
                     Disponibilite disponibilite = new Disponibilite();
                     disponibilite.setJour(jour);
@@ -63,10 +63,10 @@ public class MedecinService {
             medecin.setSpecialite(specialites[random.nextInt(specialites.length)]);
             medecins.add(medecin);
         }
-        return sauvegarderMedecins(medecins); // On utilise la méthode générique
+        return sauvegarderMedecins(medecins);
     }
 
-    // Méthode pour sauvegarder des médecins déjà créés
+
     public List<Medecin> sauvegarderMedecins(List<Medecin> medecins) {
         return medecinRepository.saveAll(medecins);
     }

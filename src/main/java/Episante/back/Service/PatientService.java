@@ -60,19 +60,17 @@ import java.util.Optional;
 
 
         public String BilanS(Patient patient) {
-            // Vérifier que le patient n'est pas null
             if (patient == null) {
                 throw new IllegalArgumentException("Le patient ne peut pas être null.");
             }
 
-            // Convertir le poids, la taille et l'âge en nombres
             double poids;
             double taille;
             int age;
 
             try {
                 poids = Double.parseDouble(patient.getPoids());
-                taille = Double.parseDouble(patient.getTaille()) / 100; // Convertir en mètres
+                taille = Double.parseDouble(patient.getTaille()) / 100;
                 age = Integer.parseInt(patient.getAge());
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Les valeurs de poids, taille ou âge sont invalides.");
@@ -86,7 +84,6 @@ import java.util.Optional;
             // Calculer l'IMC
             double imc = poids / (taille * taille);
 
-            // Définir les seuils en fonction du sexe et de l'âge
             double seuilInsuffisance = 18.5;
             double seuilNormal = 24.9;
 
@@ -99,7 +96,6 @@ import java.util.Optional;
                 seuilNormal = 27.0;
             }
 
-            // Déterminer le bilan en fonction de l'IMC
             String bilan;
             if (imc < seuilInsuffisance) {
                 bilan = String.format(

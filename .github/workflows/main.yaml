@@ -1,4 +1,4 @@
-name: Build and Deploy hello wrold app
+name: Build and Deploy our app
 
 on:
   push:
@@ -12,17 +12,45 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'corretto'
           java-version: 17
 
-#      - name: Unit tests
-#        run: mvn -B test --file pom.xml
-
       - name: Build The Application
         run: |
-          mvn clean package -DskipTests
+          mvn clean package -DskipTests  
 
+      - name: Deploy to VM via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: 172.31.252.17
+          username: ayoubroot
+          password: root
+          port: 22
+          script: |
+            echo "Starting deployment process on VM..."
+            VM_APP_DIR="/home/ayoubroot/app"
+            VM_APP_JAR="Episante-back-1.0-SNAPSHOT.jar"
 
+            # Create app directory if it doesn't exist
+            mkdir -p $VM_APP_DIR
+
+            # Stop any running instance of the app (basic attempt, adjust as needed)
+            pkill -f $VM_APP_JAR || true # Ignore error if app is not running
+
+            # Copy the JAR file to the VM
+            echo "Copying JAR file to VM..."
+            scp -o StrictHostKeyChecking=no target/$VM_APP_JAR ayoubroot@172.31.252.17:$VM_APP_DIR/
+
+            # Navigate to the app directory
+            cd $VM_APP_DIR
+
+            # Run the Spring Boot application in the background using nohup
+            echo "Starting Spring Boot application..."
+            nohup java -jar $VM_APP_JAR > application.log 2>&1 &
+
+            echo "Deployment completed successfully!"
+            echo "Application logs can be found in application.log inside $VM_APP_DIR on the VM."

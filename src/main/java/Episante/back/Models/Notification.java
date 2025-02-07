@@ -16,7 +16,6 @@ public class Notification {
     @JoinColumn(name = "rendezVous_id", nullable = false)
     private RendezVous rendezVous; // Liée à un rendez-vous
 
-    // Getters et Setters
     public Long getId() {
         return id;
     }

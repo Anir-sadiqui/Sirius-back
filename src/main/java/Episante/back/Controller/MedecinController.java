@@ -22,7 +22,6 @@ public class MedecinController {
     private final DisponibiliteRepository disponibiliteRepository;
     private final Random random = new Random();
 
-    // Liste de prénoms et noms de famille pour générer des noms aléatoires
     private static final String[] PRENOMS = {"Jean", "Marie", "Paul", "Sophie", "Lucas", "Emma", "Hugo", "Léa", "Nina", "Alex"};
     private static final String[] NOMS = {"Dupont", "Durand", "Martin", "Bernard", "Morel", "Simon", "Lefebvre", "Girard", "Mercier", "Roux"};
 
@@ -38,7 +37,6 @@ public class MedecinController {
     }
 
 
-    // Endpoint pour créer un médecin
     @PostMapping("/creer-en-masse?nombre=10")
     public Medecin creerMedecin(@RequestBody Medecin medecin) {
         return medecinRepository.save(medecin);
@@ -64,7 +62,6 @@ public class MedecinController {
         return ResponseEntity.ok(savedMedecins);
     }
 
-    // Méthode pour générer un nom aléatoire
     private String genererNomAleatoire() {
         String prenom = PRENOMS[random.nextInt(PRENOMS.length)];
         String nom = NOMS[random.nextInt(NOMS.length)];
@@ -77,7 +74,6 @@ public class MedecinController {
         return ResponseEntity.ok("Disponibilités générées avec succès !");
     }
 
-    // 🔹 API avec filtres optionnels (médecin et/ou jour)
     @GetMapping("/disponibilites")
     public ResponseEntity<List<Disponibilite>> getDisponibilites(
             @RequestParam(required = false) Long medecinId,
@@ -86,16 +82,12 @@ public class MedecinController {
         List<Disponibilite> disponibilites;
 
         if (medecinId != null && jour != null) {
-            // Filtrer par médecin et jour
             disponibilites = disponibiliteRepository.findByMedecinIdAndJour(medecinId, jour);
         } else if (medecinId != null) {
-            // Filtrer par médecin uniquement
             disponibilites = disponibiliteRepository.findByMedecinId(medecinId);
         } else if (jour != null) {
-            // Filtrer par jour uniquement
             disponibilites = disponibiliteRepository.findByJour(jour);
         } else {
-            // Aucun filtre, récupérer toutes les disponibilités
             disponibilites = disponibiliteRepository.findAll();
         }
 

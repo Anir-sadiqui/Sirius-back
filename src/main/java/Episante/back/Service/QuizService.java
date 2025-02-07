@@ -21,7 +21,7 @@ public class QuizService {
 
     public Question getNextQuestion() {
         if (questions == null || questions.isEmpty()) {
-            questions = questionRepository.findAll(); // Load from DB only if not initialized
+            questions = questionRepository.findAll();
         }
         if (currentQuestionIndex < questions.size()) {
             return questions.get(currentQuestionIndex++);
@@ -35,7 +35,7 @@ public class QuizService {
 
     public String calculateResult() {
         if (questions == null || questions.isEmpty()) {
-            questions = questionRepository.findAll(); // Load from DB if not initialized
+            questions = questionRepository.findAll();
         }
         int score = 0;
         for (Map.Entry<Long, String> entry : userAnswers.entrySet()) {
@@ -56,7 +56,6 @@ public class QuizService {
                             score -=20;
                         }
                     } catch (NumberFormatException e) {
-                        // Handle invalid format, you can print a message in the console
                         score-=10;
                     }
                 }
@@ -70,7 +69,6 @@ public class QuizService {
                             score-=20;
                         }
                     }catch (NumberFormatException e) {
-                        // Handle invalid format, you can print a message in the console
                         score-=10;
                     }
 
@@ -85,7 +83,6 @@ public class QuizService {
                             score-=20;
                         }
                     }catch (NumberFormatException e) {
-                        // Handle invalid format, you can print a message in the console
                         score-=10;
                     }
 
@@ -108,7 +105,6 @@ public class QuizService {
                             score-=20;
                         }
                     } catch (NumberFormatException e) {
-                        // Handle invalid format, you can print a message in the console
                         score-=10;
                     }
                 }
@@ -130,7 +126,6 @@ public class QuizService {
                             score-=20;
                         }
                     } catch (NumberFormatException e) {
-                        // Handle invalid format, you can print a message in the console
                         score-=10;
                     }
                 }
@@ -152,7 +147,6 @@ public class QuizService {
                             score -= 20;
                         }
                     } catch (NumberFormatException e) {
-                        // Handle invalid format, you can print a message in the console
                         score -= 10;
                     }
                 }

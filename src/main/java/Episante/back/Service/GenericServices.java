@@ -12,7 +12,6 @@ public class GenericServices {
         for (Map.Entry<String, Object> entree : MAJ.entrySet()) {
             Field champ;
             try {
-                // Recherche du champs dans les classe parent
                 champ = trouverChamp(cible.getClass(), entree.getKey());
 
                 if (champ == null) {
@@ -22,7 +21,6 @@ public class GenericServices {
 
                 champ.setAccessible(true);
 
-                // Validation du type pour éviter les erreurs
                 if (!champ.getType().isAssignableFrom(entree.getValue().getClass())) {
                     resultats.append("Type invalide pour le champ ").append(entree.getKey())
                             .append(" : attendu ").append(champ.getType().getSimpleName())
@@ -30,7 +28,6 @@ public class GenericServices {
                     continue;
                 }
 
-                // MAJ le champ
                 champ.set(cible, entree.getValue());
                 resultats.append("Champ ").append(entree.getKey()).append(" mis à jour avec succès.\n");
 
