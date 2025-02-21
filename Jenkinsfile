@@ -1,43 +1,49 @@
 pipeline {
-    agent { label 'Back-agent' }
-    tools {
-        maven 'maven'
-        jdk 'jdk21'
-    }
+    agent any
+
     environment {
-        JAVA_HOME = '/usr/lib/jvm/java-21-openjdk-amd64'
+        DEPLOY_USER = 'ayoubroot'
+        DEPLOY_HOST = '172.31.252.17'
+        DEPLOY_PATH = 'spring-app'
+        JAR_PATH = 'target/*.jar'
     }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/Anir-sadiqui/Sirius-back.git/'
+                git branch: 'master',
+                    credentialsId: '1c70b969-57ff-4c87-bb30-ae5a4e9e52f6',
+                    url: 'https://github.com/ayoubMah/springBootDemo.git'
             }
         }
-        stage('Install') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
+
         stage('Build') {
             steps {
-                sh 'pwd && mvn package'
+                sh './mvnw clean package -DskipTests'
             }
         }
-        stage('Deploy to Prod') {
+
+        stage('Deploy') {
             steps {
-                sh 'echo m6 | sudo -S systemctl restart runBack.service'
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'DeploymentVM',
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: "${JAR_PATH}",
+                                    removePrefix: 'target/',
+                                    remoteDirectory: "${DEPLOY_PATH}",
+                                    //execCommand: 'sudo systemctl restart helloworld.service'
+                                )
+                            ],
+                            usePty: false,
+                            continueOnError: false,
+                            failOnError: true
+                        )
+                    ]
+                )
             }
         }
-       stage('Deploy to Server') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'ssh-credentials-id', passwordVariable: 'PASSWORD', usernameVariable: 'USER')]) {
-                        sh '''
-                        sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no $USER@172.31.250.60 "nohup java -jar agent/workspace/back-jfile/target/Episante-back-1.0-SNAPSHOT.jar > /dev/null 2>&1 & exit"
-                        '''
-                    }
-        }
-    }
-    }
     }
 }
