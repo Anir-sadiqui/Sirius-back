@@ -19,7 +19,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:5173")
 
 @RestController
-@RequestMapping("/api/patients")
+@RequestMapping("/api/patients") // www/localhost:9090/api/patient/5
 public class PatientController {
 
     // using loggers better than Sout , for debuging , errors , ....
